@@ -1,8 +1,8 @@
 package dev.vareversat.shoppl.models
 
-class Product(var name: String, var quantity: Int, var unit: String) {
+class Product(var name: String, var quantity: Int, var unit: String, var checked: Boolean = true) {
 
     override fun toString(): String {
-        return "Product(name='$name', quantity=$quantity, unit='$unit')\n"
+        return "Product(name='$name', quantity=$quantity, unit='$unit', checked=$checked)"
     }
 }

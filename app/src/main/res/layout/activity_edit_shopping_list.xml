@@ -24,8 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/shopping_list_edit_name"
-        android:layout_above="@id/add_product_btn"
+        android:layout_above="@id/save_product_btn"
         />
+
+    <Button
+        android:id="@+id/save_product_btn"
+        android:onClick="saveCheckedProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/design_default_color_secondary"
+        android:layout_above="@id/add_product_btn"
+        android:text="@string/save_checked_products"/>
 
     <Button
         android:id="@+id/add_product_btn"

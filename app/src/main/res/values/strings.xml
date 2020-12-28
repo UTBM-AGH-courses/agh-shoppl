@@ -17,6 +17,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="edit">Edit</string>
+    <string name="save_checked_products">Save checked products</string>
     <plurals name="products_quantity">
         <item quantity="one">%d product</item>
         <item quantity="other">%d products</item>

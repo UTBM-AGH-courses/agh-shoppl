@@ -3,6 +3,7 @@ package dev.vareversat.shoppl.activities
 import android.app.ActionBar
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,6 +17,8 @@ import dev.vareversat.shoppl.models.ShoppingList
 import kotlinx.android.synthetic.main.activity_edit_shopping_list.*
 import kotlinx.android.synthetic.main.confirm_delete_shoping_list_dialog.*
 import kotlinx.android.synthetic.main.product_dialog.*
+import kotlinx.android.synthetic.main.product_item.*
+import kotlinx.android.synthetic.main.product_item.view.*
 import kotlinx.android.synthetic.main.shopping_list_dialog.*
 
 
@@ -36,7 +39,6 @@ class EditShoppingListActivity : AppCompatActivity() {
 
         val adapter = ProductAdapter(this, shoppingList.products)
         product_list.adapter = adapter
-
         product_list.setOnItemClickListener { parent, view, position, id ->
             showEditProductDialog(position)
         }
@@ -49,8 +51,7 @@ class EditShoppingListActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle presses on the action bar items
-        return when (item.getItemId()) {
+        return when (item.itemId) {
             R.id.delete_shopping_list -> {
                 showConfirmDeleteShoppingList()
                 true
@@ -167,5 +168,14 @@ class EditShoppingListActivity : AppCompatActivity() {
             ).show()
         }
         dialog.show()
+    }
+
+    fun saveCheckedProducts(view: View) {
+        saveShoppingList()
+        Toast.makeText(
+            this,
+            "Checked product saved",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
