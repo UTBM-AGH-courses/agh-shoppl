@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.BaseAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.R
@@ -14,7 +13,6 @@ import dev.vareversat.shoppl.adaptaters.TinyDB
 import dev.vareversat.shoppl.models.Product
 import dev.vareversat.shoppl.models.ShoppingList
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.product_dialog.*
 import kotlinx.android.synthetic.main.shopping_list_dialog.*
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initShoppingList()
         val adapter = ShoppingListAdapter(this, listOfShoppingItem)
 
         shopping_item_list.adapter = adapter
@@ -37,25 +34,14 @@ class MainActivity : AppCompatActivity() {
         val tinyDB = TinyDB(applicationContext)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         shopping_item_list.adapter = ShoppingListAdapter(this, listOfShoppingItem)
-        Log.i("CC", "cc")
     }
 
     private fun saveShoppingList(shoppingItems: ArrayList<Any>) {
         val tinyDB = TinyDB(applicationContext)
         tinyDB.putListObject("shopping_list", shoppingItems)
+        listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
+        Log.i("CC", listOfShoppingItem.toString())
 
-    }
-
-    private fun initShoppingList() {
-        val product1 = Product("Coffee", 1, "Box")
-        val product2 = Product("Pasta", 1, "Box")
-        val product3 = Product("Apple", 1, "Kg")
-        val product4 = Product("Sugar", 1, "Kg")
-
-        val shoppingItem1 = ShoppingList("My List 1", arrayListOf(product1))
-        val shoppingItem2 = ShoppingList("My List 2", arrayListOf(product2, product3, product4))
-        listOfShoppingItem.addAll(listOf(shoppingItem1, shoppingItem2))
-        saveShoppingList(listOfShoppingItem)
     }
 
     private fun showEditShoppingListActivity(position: Int) {

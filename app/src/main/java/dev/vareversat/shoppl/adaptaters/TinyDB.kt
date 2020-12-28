@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
 import android.os.Environment
-import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
 import com.google.gson.Gson
@@ -35,8 +34,10 @@ import kotlin.collections.ArrayList
 /*
  *  The "‚‗‚" character is not a comma, it is the SINGLE LOW-9 QUOTATION MARK unicode 201A
  *  and unicode 2017 that are used for separating the items in a list.
- */   class TinyDB(appContext: Context?) {
-    private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(appContext)
+ */
+class TinyDB(appContext: Context) {
+    private val preferences: SharedPreferences =
+        appContext.getSharedPreferences("shopping_list", Context.MODE_PRIVATE)
     private var DEFAULT_APP_IMAGEDATA_DIRECTORY: String? = null
 
     /**
