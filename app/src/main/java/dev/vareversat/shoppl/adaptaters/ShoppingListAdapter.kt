@@ -7,21 +7,20 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import dev.vareversat.shoppl.R
-import dev.vareversat.shoppl.databinding.ActivityMainBinding
-import dev.vareversat.shoppl.models.ShoppingItem
+import dev.vareversat.shoppl.models.ShoppingList
 import kotlinx.android.synthetic.main.shopping_list_item.view.*
 
-class ShoppingItemAdapter(
+class ShoppingListAdapter(
     var context: Context,
-    var shoppingItemList: ArrayList<ShoppingItem>
+    var shoppingListArray: ArrayList<Any>
 ) : BaseAdapter() {
 
     override fun getCount(): Int {
-        return shoppingItemList.size
+        return shoppingListArray.size
     }
 
-    override fun getItem(p0: Int): ShoppingItem {
-        return shoppingItemList[p0]
+    override fun getItem(p0: Int): ShoppingList {
+        return shoppingListArray[p0] as ShoppingList
     }
 
     override fun getItemId(p0: Int): Long {
