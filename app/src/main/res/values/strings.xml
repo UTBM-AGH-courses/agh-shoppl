@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Shoppl</string>
-    <string name="new_shopping_list">New Shopping List</string>
+    <string name="new_shopping_list">Create new Shopping List</string>
     <string name="test_name">Test name</string>
     <string name="test_products_quantity">2 items</string>
     <string name="create">Create</string>
@@ -18,6 +18,8 @@
     <string name="no">No</string>
     <string name="edit">Edit</string>
     <string name="save_checked_products">Save checked products</string>
+    <string name="no_shopping_list">No shopping list saved. Please create one to start</string>
+    <string name="no_produt">No product(s) added. Please add one to start</string>
     <plurals name="products_quantity">
         <item quantity="one">%d product</item>
         <item quantity="other">%d products</item>

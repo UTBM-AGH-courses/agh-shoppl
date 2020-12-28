@@ -40,7 +40,7 @@ class ProductAdapter(
         }
         productNameView.text = getItem(p0).name
         productCheckedView.isChecked = getItem(p0).checked
-        productQuantityView.text = getItem(p0).quantity.toString() + getItem(p0).unit
+        productQuantityView.text = getItem(p0).quantity.toString() + " " + getItem(p0).unit
         return itemView
     }
 }

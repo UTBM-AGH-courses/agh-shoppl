@@ -25,6 +25,11 @@ class MainActivity : AppCompatActivity() {
         shopping_item_list.setOnItemClickListener { parent, view, position, id ->
             showEditShoppingListActivity(position)
         }
+        if (listOfShoppingItem.isNotEmpty()) {
+            no_shopping_list.visibility = View.GONE
+        } else {
+            no_shopping_list.visibility = View.VISIBLE
+        }
     }
 
     override fun onResume() {
@@ -32,12 +37,22 @@ class MainActivity : AppCompatActivity() {
         val tinyDB = TinyDB(applicationContext)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         shopping_item_list.adapter = ShoppingListAdapter(this, listOfShoppingItem)
+        if (listOfShoppingItem.isNotEmpty()) {
+            no_shopping_list.visibility = View.GONE
+        } else {
+            no_shopping_list.visibility = View.VISIBLE
+        }
     }
 
     private fun saveShoppingList(shoppingItems: ArrayList<Any>) {
         val tinyDB = TinyDB(applicationContext)
         tinyDB.putListObject("shopping_list", shoppingItems)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
+        if (listOfShoppingItem.isNotEmpty()) {
+            no_shopping_list.visibility = View.GONE
+        } else {
+            no_shopping_list.visibility = View.VISIBLE
+        }
 
     }
 

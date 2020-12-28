@@ -15,6 +15,7 @@ import dev.vareversat.shoppl.adaptaters.TinyDB
 import dev.vareversat.shoppl.models.Product
 import dev.vareversat.shoppl.models.ShoppingList
 import kotlinx.android.synthetic.main.activity_edit_shopping_list.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.confirm_delete_shoping_list_dialog.*
 import kotlinx.android.synthetic.main.product_dialog.*
 import kotlinx.android.synthetic.main.product_item.*
@@ -41,6 +42,13 @@ class EditShoppingListActivity : AppCompatActivity() {
         product_list.adapter = adapter
         product_list.setOnItemClickListener { parent, view, position, id ->
             showEditProductDialog(position)
+        }
+        if (shoppingList.products.isNotEmpty()) {
+            no_products.visibility = View.GONE
+            save_product_btn.visibility = View.VISIBLE
+        } else {
+            no_products.visibility = View.VISIBLE
+            save_product_btn.visibility = View.GONE
         }
     }
 
@@ -127,6 +135,13 @@ class EditShoppingListActivity : AppCompatActivity() {
             )
             saveShoppingList()
             dialog.dismiss()
+            if (shoppingList.products.isNotEmpty()) {
+                no_products.visibility = View.GONE
+                save_product_btn.visibility = View.VISIBLE
+            } else {
+                no_products.visibility = View.VISIBLE
+                save_product_btn.visibility = View.GONE
+            }
             Toast.makeText(
                 this,
                 dialog.product_name_input_text.text.toString() + " added to " + shoppingList.name,
@@ -161,6 +176,13 @@ class EditShoppingListActivity : AppCompatActivity() {
             shoppingList.products.removeAt(position)
             saveShoppingList()
             dialog.dismiss()
+            if (shoppingList.products.isNotEmpty()) {
+                no_products.visibility = View.GONE
+                save_product_btn.visibility = View.VISIBLE
+            } else {
+                no_products.visibility = View.VISIBLE
+                save_product_btn.visibility = View.GONE
+            }
             Toast.makeText(
                 this,
                 dialog.product_name_input_text.text.toString() + " deleted from " + shoppingList.name,
