@@ -3,14 +3,12 @@ package dev.vareversat.shoppl.activities
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.R
 import dev.vareversat.shoppl.adaptaters.ShoppingListAdapter
 import dev.vareversat.shoppl.adaptaters.TinyDB
-import dev.vareversat.shoppl.models.Product
 import dev.vareversat.shoppl.models.ShoppingList
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.shopping_list_dialog.*
@@ -40,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         val tinyDB = TinyDB(applicationContext)
         tinyDB.putListObject("shopping_list", shoppingItems)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
-        Log.i("CC", listOfShoppingItem.toString())
 
     }
 
