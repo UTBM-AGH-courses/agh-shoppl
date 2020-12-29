@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import dev.vareversat.shoppl.R
 import dev.vareversat.shoppl.adaptaters.ShoppingListAdapter
 import dev.vareversat.shoppl.adaptaters.TinyDB
 import dev.vareversat.shoppl.databinding.ActivityMainBinding
@@ -24,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         val adapter = ShoppingListAdapter(this, listOfShoppingItem)
-
         binding.shoppingItemList.adapter = adapter
         binding.shoppingItemList.setOnItemClickListener { _, _, position, _ ->
             showEditShoppingListActivity(position)
@@ -52,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         val tinyDB = TinyDB(applicationContext)
         tinyDB.putListObject("shopping_list", shoppingItems)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
+        binding.shoppingItemList.adapter = ShoppingListAdapter(this, listOfShoppingItem)
         if (listOfShoppingItem.isNotEmpty()) {
             binding.noShoppingList.visibility = View.GONE
         } else {
@@ -69,7 +68,6 @@ class MainActivity : AppCompatActivity() {
     fun showCreateShoppingListDialog(@Suppress("UNUSED_PARAMETER") view: View) {
         val dialog = Dialog(this)
         dialog.setTitle("New shopping list")
-        dialog.setContentView(R.layout.shopping_list_dialog)
         val dialogBinding = ShoppingListDialogBinding.inflate(layoutInflater)
         dialogBinding.createShoppingListBtn.setOnClickListener {
             listOfShoppingItem.add(
@@ -86,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+        dialog.setContentView(dialogBinding.root)
         dialog.show()
     }
 }

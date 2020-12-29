@@ -75,20 +75,20 @@ class EditShoppingListActivity : AppCompatActivity() {
     private fun showConfirmDeleteShoppingList() {
         val dialog = Dialog(this)
         dialog.setTitle("Delete shopping list")
-        dialog.setContentView(R.layout.confirm_delete_shoping_list_dialog)
         val dialogBinding = ConfirmDeleteShopingListDialogBinding.inflate(layoutInflater)
         dialogBinding.confirmButton.setOnClickListener {
             val tinyDB = TinyDB(applicationContext)
             val list = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
             list.removeAt(index!!)
             tinyDB.putListObject("shopping_list", list)
+            dialog.dismiss()
             finish()
         }
         dialogBinding.cancelButton.setOnClickListener {
             dialog.dismiss()
         }
+        dialog.setContentView(dialogBinding.root)
         dialog.show()
-
     }
 
     private fun getShoppingList() {
@@ -119,6 +119,7 @@ class EditShoppingListActivity : AppCompatActivity() {
             dialog.dismiss()
             Toast.makeText(this, "Shopping list name updated", Toast.LENGTH_SHORT).show()
         }
+        dialog.setContentView(dialogBinding.root)
         dialog.show()
     }
 
@@ -129,10 +130,16 @@ class EditShoppingListActivity : AppCompatActivity() {
         val dialogBinding = ProductDialogBinding.inflate(layoutInflater)
         dialogBinding.deleteProductBtn.visibility = View.GONE
         dialogBinding.createProductBtn.setOnClickListener {
+            val quantity = dialogBinding.productQuantityInputText.text.toString()
+            val quantityInt = try {
+                quantity.toInt()
+            } catch (e: NumberFormatException) {
+                0
+            }
             shoppingList.products.add(
                 Product(
                     dialogBinding.productNameInputText.text.toString(),
-                    dialogBinding.productQuantityInputText.text.toString().toInt(),
+                    quantityInt,
                     dialogBinding.productUnitInputText.text.toString()
                 )
             )
@@ -151,6 +158,7 @@ class EditShoppingListActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+        dialog.setContentView(dialogBinding.root)
         dialog.show()
     }
 
@@ -197,6 +205,7 @@ class EditShoppingListActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+        dialog.setContentView(dialogBinding.root)
         dialog.show()
     }
 
