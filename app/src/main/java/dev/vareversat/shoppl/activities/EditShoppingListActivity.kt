@@ -161,8 +161,12 @@ class EditShoppingListActivity : AppCompatActivity() {
         dialog.product_unit_input_text.setText(shoppingList.products[position].unit)
         dialog.create_product_btn.setOnClickListener {
             shoppingList.products[position].name = dialog.product_name_input_text.text.toString()
-            shoppingList.products[position].quantity =
-                dialog.product_quantity_input_text.text.toString().toInt()
+            val quantity =dialog.product_quantity_input_text.text.toString()
+            try {
+                shoppingList.products[position].quantity = quantity.toInt()
+            } catch (e: NumberFormatException) {
+                shoppingList.products[position].quantity = 0
+            }
             shoppingList.products[position].unit = dialog.product_unit_input_text.text.toString()
             saveShoppingList()
             dialog.dismiss()
