@@ -8,6 +8,7 @@
     tools:context=".activities.EditShoppingListActivity">
 
     <TextView
+        android:layout_margin="5sp"
         android:id="@+id/shopping_list_edit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +20,7 @@
         android:textStyle="bold"/>
 
     <TextView
+        android:layout_margin="10sp"
         android:id="@+id/no_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,6 +32,7 @@
 
 
     <ListView
+        android:layout_margin="5sp"
         android:id="@+id/product_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,6 +41,7 @@
         />
 
     <Button
+        android:layout_margin="10sp"
         android:id="@+id/save_product_btn"
         android:onClick="saveCheckedProducts"
         android:layout_width="match_parent"
@@ -47,6 +51,7 @@
         android:text="@string/save_checked_products"/>
 
     <Button
+        android:layout_margin="10sp"
         android:id="@+id/add_product_btn"
         android:onClick="showAddProductDialog"
         android:layout_width="match_parent"

@@ -11,10 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.R
 import dev.vareversat.shoppl.adaptaters.ProductAdapter
 import dev.vareversat.shoppl.adaptaters.TinyDB
-import dev.vareversat.shoppl.databinding.ActivityEditShoppingListBinding
-import dev.vareversat.shoppl.databinding.ConfirmDeleteShopingListDialogBinding
-import dev.vareversat.shoppl.databinding.ProductDialogBinding
-import dev.vareversat.shoppl.databinding.ShoppingListDialogBinding
+import dev.vareversat.shoppl.databinding.*
 import dev.vareversat.shoppl.models.Product
 import dev.vareversat.shoppl.models.ShoppingList
 
@@ -22,13 +19,12 @@ import dev.vareversat.shoppl.models.ShoppingList
 class EditShoppingListActivity : AppCompatActivity() {
 
     private lateinit var shoppingList: ShoppingList
-    private lateinit var binding: ActivityEditShoppingListBinding
+    private lateinit var binding: EditShoppingListActivityBinding
     private var index: Int? = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_shopping_list)
-        binding = ActivityEditShoppingListBinding.inflate(layoutInflater)
+        binding = EditShoppingListActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
         val actionBar: ActionBar? = actionBar
