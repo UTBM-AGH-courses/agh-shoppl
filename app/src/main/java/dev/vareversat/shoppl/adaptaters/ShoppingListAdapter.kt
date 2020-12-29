@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.TextView
 import dev.vareversat.shoppl.R
-import dev.vareversat.shoppl.databinding.ProductItemBinding
 import dev.vareversat.shoppl.databinding.ShoppingListItemBinding
 import dev.vareversat.shoppl.models.ShoppingList
 
@@ -35,12 +33,16 @@ class ShoppingListAdapter(
         val shoppingItemNameView = binding.shoppingItemName
         val shoppingItemSizeView = binding.shoppingItemSize
         shoppingItemNameView.text = getItem(p0).name
-        shoppingItemSizeView.text = String.format(
-            context.resources.getQuantityString(
-                R.plurals.products_quantity,
-                getItem(p0).products.size
-            ), getItem(p0).products.size
-        )
+        if (getItem(p0).products.size == 0) {
+            shoppingItemSizeView.text = context.getString(R.string.product_quantity_0)
+        } else {
+            shoppingItemSizeView.text = String.format(
+                context.resources.getQuantityString(
+                    R.plurals.products_quantity,
+                    getItem(p0).products.size
+                ), getItem(p0).products.size
+            )
+        }
         return binding.root
     }
 }

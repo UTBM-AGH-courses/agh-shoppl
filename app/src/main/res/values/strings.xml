@@ -21,8 +21,9 @@
     <string name="no_shopping_list">No shopping list saved. Please create one to start</string>
     <string name="no_produt">No product(s) added. Please add one to start</string>
     <string name="string_with_spaces">%s %s</string>
+    <string name="product_quantity_0">0 product</string>
     <plurals name="products_quantity">
-        <item quantity="one">%d product</item>
+        <item quantity="one">1 product</item>
         <item quantity="other">%d products</item>
     </plurals>
 </resources>
