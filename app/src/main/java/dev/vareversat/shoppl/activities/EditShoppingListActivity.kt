@@ -200,7 +200,7 @@ class EditShoppingListActivity : AppCompatActivity() {
         saveShoppingList()
         Toast.makeText(
             this,
-            "Checked product saved",
+            "Checked product(s) saved",
             Toast.LENGTH_SHORT
         ).show()
     }
