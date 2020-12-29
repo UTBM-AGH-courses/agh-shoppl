@@ -3,7 +3,6 @@ package dev.vareversat.shoppl.activities
 import android.app.ActionBar
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,43 +11,44 @@ import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.R
 import dev.vareversat.shoppl.adaptaters.ProductAdapter
 import dev.vareversat.shoppl.adaptaters.TinyDB
+import dev.vareversat.shoppl.databinding.ActivityEditShoppingListBinding
+import dev.vareversat.shoppl.databinding.ConfirmDeleteShopingListDialogBinding
+import dev.vareversat.shoppl.databinding.ProductDialogBinding
+import dev.vareversat.shoppl.databinding.ShoppingListDialogBinding
 import dev.vareversat.shoppl.models.Product
 import dev.vareversat.shoppl.models.ShoppingList
-import kotlinx.android.synthetic.main.activity_edit_shopping_list.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.confirm_delete_shoping_list_dialog.*
-import kotlinx.android.synthetic.main.product_dialog.*
-import kotlinx.android.synthetic.main.product_item.*
-import kotlinx.android.synthetic.main.product_item.view.*
-import kotlinx.android.synthetic.main.shopping_list_dialog.*
 
 
 class EditShoppingListActivity : AppCompatActivity() {
 
     private lateinit var shoppingList: ShoppingList
+    private lateinit var binding: ActivityEditShoppingListBinding
     private var index: Int? = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_shopping_list)
+        binding = ActivityEditShoppingListBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         val actionBar: ActionBar? = actionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         index = intent.getIntExtra("shoppingListIndex", 0)
         getShoppingList()
-        shopping_list_edit_name.text = shoppingList.name
+        binding.shoppingListEditName.text = shoppingList.name
 
         val adapter = ProductAdapter(this, shoppingList.products)
-        product_list.adapter = adapter
-        product_list.setOnItemClickListener { parent, view, position, id ->
+        binding.productList.adapter = adapter
+        binding.productList.setOnItemClickListener { _, _, position, _ ->
             showEditProductDialog(position)
         }
         if (shoppingList.products.isNotEmpty()) {
-            no_products.visibility = View.GONE
-            save_product_btn.visibility = View.VISIBLE
+            binding.noProducts.visibility = View.GONE
+            binding.saveProductBtn.visibility = View.VISIBLE
         } else {
-            no_products.visibility = View.VISIBLE
-            save_product_btn.visibility = View.GONE
+            binding.noProducts.visibility = View.VISIBLE
+            binding.saveProductBtn.visibility = View.GONE
         }
     }
 
@@ -76,14 +76,15 @@ class EditShoppingListActivity : AppCompatActivity() {
         val dialog = Dialog(this)
         dialog.setTitle("Delete shopping list")
         dialog.setContentView(R.layout.confirm_delete_shoping_list_dialog)
-        dialog.confirm_button.setOnClickListener {
+        val dialogBinding = ConfirmDeleteShopingListDialogBinding.inflate(layoutInflater)
+        dialogBinding.confirmButton.setOnClickListener {
             val tinyDB = TinyDB(applicationContext)
             val list = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
             list.removeAt(index!!)
             tinyDB.putListObject("shopping_list", list)
             finish()
         }
-        dialog.cancel_button.setOnClickListener {
+        dialogBinding.cancelButton.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
@@ -101,18 +102,19 @@ class EditShoppingListActivity : AppCompatActivity() {
         val list = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         list[index!!] = shoppingList
         tinyDB.putListObject("shopping_list", list)
-        product_list.adapter = ProductAdapter(this, shoppingList.products)
+        binding.productList.adapter = ProductAdapter(this, shoppingList.products)
     }
 
     private fun showEditShoppingListNameDialog() {
         val dialog = Dialog(this)
         dialog.setTitle("Edit shopping list name")
         dialog.setContentView(R.layout.shopping_list_dialog)
-        dialog.create_shopping_list_btn.text = getString(R.string.update)
-        dialog.shopping_list_input_text.setText(shoppingList.name)
-        dialog.create_shopping_list_btn.setOnClickListener {
-            shoppingList.name = dialog.shopping_list_input_text.text.toString()
-            shopping_list_edit_name.text = shoppingList.name
+        val dialogBinding = ShoppingListDialogBinding.inflate(layoutInflater)
+        dialogBinding.createShoppingListBtn.text = getString(R.string.update)
+        dialogBinding.shoppingListInputText.setText(shoppingList.name)
+        dialogBinding.createShoppingListBtn.setOnClickListener {
+            shoppingList.name = dialogBinding.shoppingListInputText.text.toString()
+            binding.shoppingListEditName.text = shoppingList.name
             saveShoppingList()
             dialog.dismiss()
             Toast.makeText(this, "Shopping list name updated", Toast.LENGTH_SHORT).show()
@@ -120,31 +122,32 @@ class EditShoppingListActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun showAddProductDialog(view: View) {
+    fun showAddProductDialog(@Suppress("UNUSED_PARAMETER") view: View) {
         val dialog = Dialog(this)
         dialog.setTitle("New product")
         dialog.setContentView(R.layout.product_dialog)
-        dialog.delete_product_btn.visibility = View.GONE
-        dialog.create_product_btn.setOnClickListener {
+        val dialogBinding = ProductDialogBinding.inflate(layoutInflater)
+        dialogBinding.deleteProductBtn.visibility = View.GONE
+        dialogBinding.createProductBtn.setOnClickListener {
             shoppingList.products.add(
                 Product(
-                    dialog.product_name_input_text.text.toString(),
-                    dialog.product_quantity_input_text.text.toString().toInt(),
-                    dialog.product_unit_input_text.text.toString()
+                    dialogBinding.productNameInputText.text.toString(),
+                    dialogBinding.productQuantityInputText.text.toString().toInt(),
+                    dialogBinding.productUnitInputText.text.toString()
                 )
             )
             saveShoppingList()
             dialog.dismiss()
             if (shoppingList.products.isNotEmpty()) {
-                no_products.visibility = View.GONE
-                save_product_btn.visibility = View.VISIBLE
+                binding.noProducts.visibility = View.GONE
+                binding.saveProductBtn.visibility = View.VISIBLE
             } else {
-                no_products.visibility = View.VISIBLE
-                save_product_btn.visibility = View.GONE
+                binding.noProducts.visibility = View.VISIBLE
+                binding.saveProductBtn.visibility = View.GONE
             }
             Toast.makeText(
                 this,
-                dialog.product_name_input_text.text.toString() + " added to " + shoppingList.name,
+                dialogBinding.productNameInputText.text.toString() + " added to " + shoppingList.name,
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -155,48 +158,49 @@ class EditShoppingListActivity : AppCompatActivity() {
         val dialog = Dialog(this)
         dialog.setTitle("Edit product")
         dialog.setContentView(R.layout.product_dialog)
-        dialog.create_product_btn.text = getString(R.string.update)
-        dialog.product_name_input_text.setText(shoppingList.products[position].name)
-        dialog.product_quantity_input_text.setText(shoppingList.products[position].quantity.toString())
-        dialog.product_unit_input_text.setText(shoppingList.products[position].unit)
-        dialog.create_product_btn.setOnClickListener {
-            shoppingList.products[position].name = dialog.product_name_input_text.text.toString()
-            val quantity =dialog.product_quantity_input_text.text.toString()
+        val dialogBinding = ProductDialogBinding.inflate(layoutInflater)
+        dialogBinding.createProductBtn.text = getString(R.string.update)
+        dialogBinding.productNameInputText.setText(shoppingList.products[position].name)
+        dialogBinding.productQuantityInputText.setText(shoppingList.products[position].quantity.toString())
+        dialogBinding.productUnitInputText.setText(shoppingList.products[position].unit)
+        dialogBinding.createProductBtn.setOnClickListener {
+            shoppingList.products[position].name = dialogBinding.productNameInputText.text.toString()
+            val quantity = dialogBinding.productQuantityInputText.text.toString()
             try {
                 shoppingList.products[position].quantity = quantity.toInt()
             } catch (e: NumberFormatException) {
                 shoppingList.products[position].quantity = 0
             }
-            shoppingList.products[position].unit = dialog.product_unit_input_text.text.toString()
+            shoppingList.products[position].unit = dialogBinding.productUnitInputText.text.toString()
             saveShoppingList()
             dialog.dismiss()
             Toast.makeText(
                 this,
-                dialog.product_name_input_text.text.toString() + " updated",
+                dialogBinding.productNameInputText.text.toString() + " updated",
                 Toast.LENGTH_SHORT
             ).show()
         }
-        dialog.delete_product_btn.setOnClickListener {
+        dialogBinding.deleteProductBtn.setOnClickListener {
             shoppingList.products.removeAt(position)
             saveShoppingList()
             dialog.dismiss()
             if (shoppingList.products.isNotEmpty()) {
-                no_products.visibility = View.GONE
-                save_product_btn.visibility = View.VISIBLE
+                binding.noProducts.visibility = View.GONE
+                binding.saveProductBtn.visibility = View.VISIBLE
             } else {
-                no_products.visibility = View.VISIBLE
-                save_product_btn.visibility = View.GONE
+                binding.noProducts.visibility = View.VISIBLE
+                binding.saveProductBtn.visibility = View.GONE
             }
             Toast.makeText(
                 this,
-                dialog.product_name_input_text.text.toString() + " deleted from " + shoppingList.name,
+                dialogBinding.productNameInputText.text.toString() + " deleted from " + shoppingList.name,
                 Toast.LENGTH_SHORT
             ).show()
         }
         dialog.show()
     }
 
-    fun saveCheckedProducts(view: View) {
+    fun saveCheckedProducts(@Suppress("UNUSED_PARAMETER") view: View) {
         saveShoppingList()
         Toast.makeText(
             this,

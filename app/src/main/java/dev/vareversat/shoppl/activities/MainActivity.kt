@@ -9,26 +9,30 @@ import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.R
 import dev.vareversat.shoppl.adaptaters.ShoppingListAdapter
 import dev.vareversat.shoppl.adaptaters.TinyDB
+import dev.vareversat.shoppl.databinding.ActivityMainBinding
+import dev.vareversat.shoppl.databinding.ShoppingListDialogBinding
 import dev.vareversat.shoppl.models.ShoppingList
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.shopping_list_dialog.*
 
 class MainActivity : AppCompatActivity() {
 
     private var listOfShoppingItem = ArrayList<Any>()
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         val adapter = ShoppingListAdapter(this, listOfShoppingItem)
 
-        shopping_item_list.adapter = adapter
-        shopping_item_list.setOnItemClickListener { parent, view, position, id ->
+        binding.shoppingItemList.adapter = adapter
+        binding.shoppingItemList.setOnItemClickListener { _, _, position, _ ->
             showEditShoppingListActivity(position)
         }
         if (listOfShoppingItem.isNotEmpty()) {
-            no_shopping_list.visibility = View.GONE
+            binding.noShoppingList.visibility = View.GONE
         } else {
-            no_shopping_list.visibility = View.VISIBLE
+            binding.noShoppingList.visibility = View.VISIBLE
         }
     }
 
@@ -36,11 +40,11 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val tinyDB = TinyDB(applicationContext)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
-        shopping_item_list.adapter = ShoppingListAdapter(this, listOfShoppingItem)
+        binding.shoppingItemList.adapter = ShoppingListAdapter(this, listOfShoppingItem)
         if (listOfShoppingItem.isNotEmpty()) {
-            no_shopping_list.visibility = View.GONE
+            binding.noShoppingList.visibility = View.GONE
         } else {
-            no_shopping_list.visibility = View.VISIBLE
+            binding.noShoppingList.visibility = View.VISIBLE
         }
     }
 
@@ -49,9 +53,9 @@ class MainActivity : AppCompatActivity() {
         tinyDB.putListObject("shopping_list", shoppingItems)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         if (listOfShoppingItem.isNotEmpty()) {
-            no_shopping_list.visibility = View.GONE
+            binding.noShoppingList.visibility = View.GONE
         } else {
-            no_shopping_list.visibility = View.VISIBLE
+            binding.noShoppingList.visibility = View.VISIBLE
         }
 
     }
@@ -62,14 +66,15 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, position)
     }
 
-    fun showCreateShoppingListDialog(view: View) {
+    fun showCreateShoppingListDialog(@Suppress("UNUSED_PARAMETER") view: View) {
         val dialog = Dialog(this)
         dialog.setTitle("New shopping list")
         dialog.setContentView(R.layout.shopping_list_dialog)
-        dialog.create_shopping_list_btn.setOnClickListener {
+        val dialogBinding = ShoppingListDialogBinding.inflate(layoutInflater)
+        dialogBinding.createShoppingListBtn.setOnClickListener {
             listOfShoppingItem.add(
                 ShoppingList(
-                    dialog.shopping_list_input_text.text.toString(),
+                    dialogBinding.shoppingListInputText.text.toString(),
                     arrayListOf()
                 )
             )
@@ -77,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             Toast.makeText(
                 this,
-                dialog.shopping_list_input_text.text.toString() + " created",
+                dialogBinding.shoppingListInputText.text.toString() + " created",
                 Toast.LENGTH_SHORT
             ).show()
         }
