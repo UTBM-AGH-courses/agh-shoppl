@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val tinyDB = SharedPreferencesService(applicationContext)
-        listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
+        listOfShoppingItem = tinyDB.getShoppingList("shopping_list", ShoppingList::class.java)
         binding.shoppingItemList.adapter = ShoppingListAdapter(this, listOfShoppingItem)
         if (listOfShoppingItem.isNotEmpty()) {
             binding.noShoppingList.visibility = View.GONE
@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveShoppingList(shoppingItems: ArrayList<Any>) {
         val tinyDB = SharedPreferencesService(applicationContext)
-        tinyDB.putListObject("shopping_list", shoppingItems)
-        listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
+        tinyDB.saveShoppingList("shopping_list", shoppingItems)
+        listOfShoppingItem = tinyDB.getShoppingList("shopping_list", ShoppingList::class.java)
         binding.shoppingItemList.adapter = ShoppingListAdapter(this, listOfShoppingItem)
         if (listOfShoppingItem.isNotEmpty()) {
             binding.noShoppingList.visibility = View.GONE
