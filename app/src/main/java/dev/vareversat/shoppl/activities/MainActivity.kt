@@ -7,10 +7,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.adaptaters.ShoppingListAdapter
-import dev.vareversat.shoppl.adaptaters.TinyDB
 import dev.vareversat.shoppl.databinding.ActivityMainBinding
 import dev.vareversat.shoppl.databinding.ShoppingListDialogBinding
 import dev.vareversat.shoppl.models.ShoppingList
+import dev.vareversat.shoppl.services.SharedPreferencesService
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val tinyDB = TinyDB(applicationContext)
+        val tinyDB = SharedPreferencesService(applicationContext)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         binding.shoppingItemList.adapter = ShoppingListAdapter(this, listOfShoppingItem)
         if (listOfShoppingItem.isNotEmpty()) {
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveShoppingList(shoppingItems: ArrayList<Any>) {
-        val tinyDB = TinyDB(applicationContext)
+        val tinyDB = SharedPreferencesService(applicationContext)
         tinyDB.putListObject("shopping_list", shoppingItems)
         listOfShoppingItem = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         binding.shoppingItemList.adapter = ShoppingListAdapter(this, listOfShoppingItem)

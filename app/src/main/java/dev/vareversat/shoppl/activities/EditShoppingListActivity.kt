@@ -10,13 +10,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.R
 import dev.vareversat.shoppl.adaptaters.ProductAdapter
-import dev.vareversat.shoppl.adaptaters.TinyDB
 import dev.vareversat.shoppl.databinding.ConfirmDeleteShopingListDialogBinding
 import dev.vareversat.shoppl.databinding.EditShoppingListActivityBinding
 import dev.vareversat.shoppl.databinding.ProductDialogBinding
 import dev.vareversat.shoppl.databinding.ShoppingListDialogBinding
 import dev.vareversat.shoppl.models.Product
 import dev.vareversat.shoppl.models.ShoppingList
+import dev.vareversat.shoppl.services.SharedPreferencesService
 
 
 class EditShoppingListActivity : AppCompatActivity() {
@@ -83,7 +83,7 @@ class EditShoppingListActivity : AppCompatActivity() {
         dialog.setTitle("Delete shopping list")
         val dialogBinding = ConfirmDeleteShopingListDialogBinding.inflate(layoutInflater)
         dialogBinding.confirmButton.setOnClickListener {
-            val tinyDB = TinyDB(applicationContext)
+            val tinyDB = SharedPreferencesService(applicationContext)
             val list = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
             list.removeAt(index!!)
             tinyDB.putListObject("shopping_list", list)
@@ -98,13 +98,13 @@ class EditShoppingListActivity : AppCompatActivity() {
     }
 
     private fun getShoppingList() {
-        val tinyDB = TinyDB(applicationContext)
+        val tinyDB = SharedPreferencesService(applicationContext)
         val list = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         shoppingList = list[index!!] as ShoppingList
     }
 
     private fun saveShoppingList() {
-        val tinyDB = TinyDB(applicationContext)
+        val tinyDB = SharedPreferencesService(applicationContext)
         val list = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         list[index!!] = shoppingList
         tinyDB.putListObject("shopping_list", list)
