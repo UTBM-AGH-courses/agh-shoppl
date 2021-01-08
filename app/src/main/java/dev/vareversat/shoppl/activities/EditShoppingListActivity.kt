@@ -11,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import dev.vareversat.shoppl.R
 import dev.vareversat.shoppl.adaptaters.ProductAdapter
 import dev.vareversat.shoppl.adaptaters.TinyDB
-import dev.vareversat.shoppl.databinding.*
+import dev.vareversat.shoppl.databinding.ConfirmDeleteShopingListDialogBinding
+import dev.vareversat.shoppl.databinding.EditShoppingListActivityBinding
+import dev.vareversat.shoppl.databinding.ProductDialogBinding
+import dev.vareversat.shoppl.databinding.ShoppingListDialogBinding
 import dev.vareversat.shoppl.models.Product
 import dev.vareversat.shoppl.models.ShoppingList
 
@@ -34,10 +37,17 @@ class EditShoppingListActivity : AppCompatActivity() {
         getShoppingList()
         binding.shoppingListEditName.text = shoppingList.name
 
-        val adapter = ProductAdapter(this, shoppingList.products)
-        binding.productList.adapter = adapter
-        binding.productList.setOnItemClickListener { _, _, position, _ ->
-            showEditProductDialog(position)
+        val adapter =
+            ProductAdapter(this, shoppingList.products.keys.toTypedArray(), shoppingList.products)
+        binding.productList.setAdapter(adapter)
+        binding.productList.expandGroup(0)
+        binding.productList.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            showEditProductDialog(groupPosition, childPosition)
+            true
+        }
+        binding.productList.setOnGroupClickListener { _, _, i, _ ->
+            binding.productList.expandGroup(i)
+            true
         }
         if (shoppingList.products.isNotEmpty()) {
             binding.noProducts.visibility = View.GONE
@@ -98,7 +108,13 @@ class EditShoppingListActivity : AppCompatActivity() {
         val list = tinyDB.getListObject("shopping_list", ShoppingList::class.java)
         list[index!!] = shoppingList
         tinyDB.putListObject("shopping_list", list)
-        binding.productList.adapter = ProductAdapter(this, shoppingList.products)
+        binding.productList.setAdapter(
+            ProductAdapter(
+                this,
+                shoppingList.products.keys.toTypedArray(),
+                shoppingList.products
+            )
+        )
     }
 
     private fun showEditShoppingListNameDialog() {
@@ -127,18 +143,32 @@ class EditShoppingListActivity : AppCompatActivity() {
         dialogBinding.deleteProductBtn.visibility = View.GONE
         dialogBinding.createProductBtn.setOnClickListener {
             val quantity = dialogBinding.productQuantityInputText.text.toString()
+            val category = dialogBinding.categoryInputText.text.toString()
+            val checkedCategory = category.ifEmpty { "No category" }
             val quantityInt = try {
                 quantity.toInt()
             } catch (e: NumberFormatException) {
                 0
             }
-            shoppingList.products.add(
-                Product(
-                    dialogBinding.productNameInputText.text.toString(),
-                    quantityInt,
-                    dialogBinding.productUnitInputText.text.toString()
+            val productList = shoppingList.products[checkedCategory]
+            if (productList.isNullOrEmpty()) {
+                shoppingList.products[checkedCategory] = arrayListOf(
+                    Product(
+                        dialogBinding.productNameInputText.text.toString(),
+                        quantityInt,
+                        dialogBinding.productUnitInputText.text.toString()
+                    )
                 )
-            )
+            } else {
+                productList.add(
+                    Product(
+                        dialogBinding.productNameInputText.text.toString(),
+                        quantityInt,
+                        dialogBinding.productUnitInputText.text.toString()
+                    )
+                )
+            }
+
             saveShoppingList()
             dialog.dismiss()
             if (shoppingList.products.isNotEmpty()) {
@@ -158,24 +188,64 @@ class EditShoppingListActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun showEditProductDialog(position: Int) {
+    private fun showEditProductDialog(groupPosition: Int, childPosition: Int) {
         val dialog = Dialog(this)
         dialog.setTitle("Edit product")
         dialog.setContentView(R.layout.product_dialog)
         val dialogBinding = ProductDialogBinding.inflate(layoutInflater)
         dialogBinding.createProductBtn.text = getString(R.string.update)
-        dialogBinding.productNameInputText.setText(shoppingList.products[position].name)
-        dialogBinding.productQuantityInputText.setText(shoppingList.products[position].quantity.toString())
-        dialogBinding.productUnitInputText.setText(shoppingList.products[position].unit)
+        dialogBinding.productNameInputText.setText(
+            shoppingList.products[shoppingList.products.keys.toTypedArray()[groupPosition]]?.get(
+                childPosition
+            )?.name
+        )
+        dialogBinding.productQuantityInputText.setText(
+            shoppingList.products[shoppingList.products.keys.toTypedArray()[groupPosition]]?.get(
+                childPosition
+            )?.quantity.toString()
+        )
+        dialogBinding.productUnitInputText.setText(
+            shoppingList.products[shoppingList.products.keys.toTypedArray()[groupPosition]]?.get(
+                childPosition
+            )?.unit
+        )
+        dialogBinding.categoryInputText.setText(
+            shoppingList.products.keys.toTypedArray()[groupPosition]
+        )
         dialogBinding.createProductBtn.setOnClickListener {
-            shoppingList.products[position].name = dialogBinding.productNameInputText.text.toString()
+            val newCategory = dialogBinding.categoryInputText.text.toString()
+            val checkedNewCategory = newCategory.ifEmpty { "No category" }
+            val oldCategory = shoppingList.products.keys.toTypedArray()[groupPosition]
+            val product = Product(
+                dialogBinding.productNameInputText.text.toString(),
+                0,
+                dialogBinding.productUnitInputText.text.toString()
+            )
             val quantity = dialogBinding.productQuantityInputText.text.toString()
             try {
-                shoppingList.products[position].quantity = quantity.toInt()
+                product.quantity = quantity.toInt()
             } catch (e: NumberFormatException) {
-                shoppingList.products[position].quantity = 0
+                product.quantity = 0
             }
-            shoppingList.products[position].unit = dialogBinding.productUnitInputText.text.toString()
+            if (checkedNewCategory == oldCategory) {
+                shoppingList.products[shoppingList.products.keys.toTypedArray()[groupPosition]]?.set(
+                    childPosition,
+                    product
+                )
+            } else {
+                shoppingList.products[shoppingList.products.keys.toTypedArray()[groupPosition]]?.removeAt(
+                    childPosition
+                )
+                if (shoppingList.products[shoppingList.products.keys.toTypedArray()[groupPosition]]?.isEmpty() == true) {
+                    shoppingList.products.remove(shoppingList.products.keys.toTypedArray()[groupPosition])
+                }
+                val products = shoppingList.products[checkedNewCategory]
+                if (products.isNullOrEmpty()) {
+                    shoppingList.products[checkedNewCategory] = arrayListOf(product)
+                } else {
+                    products.add(product)
+                }
+            }
             saveShoppingList()
             dialog.dismiss()
             Toast.makeText(
@@ -185,7 +255,9 @@ class EditShoppingListActivity : AppCompatActivity() {
             ).show()
         }
         dialogBinding.deleteProductBtn.setOnClickListener {
-            shoppingList.products.removeAt(position)
+            shoppingList.products[shoppingList.products.keys.toTypedArray()[groupPosition]]?.removeAt(
+                childPosition
+            )
             saveShoppingList()
             dialog.dismiss()
             if (shoppingList.products.isNotEmpty()) {

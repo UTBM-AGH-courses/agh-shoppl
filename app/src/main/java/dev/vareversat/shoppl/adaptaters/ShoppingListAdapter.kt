@@ -32,15 +32,19 @@ class ShoppingListAdapter(
         val binding = ShoppingListItemBinding.inflate(layoutInflater)
         val shoppingItemNameView = binding.shoppingItemName
         val shoppingItemSizeView = binding.shoppingItemSize
+        var size = 0
+        for (key in getItem(p0).products.keys) {
+            size += getItem(p0).products[key]!!.size
+        }
         shoppingItemNameView.text = getItem(p0).name
-        if (getItem(p0).products.size == 0) {
+        if (size == 0) {
             shoppingItemSizeView.text = context.getString(R.string.product_quantity_0)
         } else {
             shoppingItemSizeView.text = String.format(
                 context.resources.getQuantityString(
                     R.plurals.products_quantity,
-                    getItem(p0).products.size
-                ), getItem(p0).products.size
+                    size
+                ), size
             )
         }
         return binding.root

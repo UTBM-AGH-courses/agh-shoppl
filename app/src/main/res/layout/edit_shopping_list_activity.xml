@@ -31,14 +31,13 @@
         android:text="@string/no_produt"/>
 
 
-    <ListView
+    <ExpandableListView
         android:layout_margin="5sp"
         android:id="@+id/product_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/shopping_list_edit_name"
-        android:layout_above="@id/save_product_btn"
-        />
+        android:layout_above="@id/save_product_btn" />
 
     <Button
         android:layout_margin="10sp"
@@ -58,4 +57,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/add_product"/>
+
 </RelativeLayout>

@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             listOfShoppingItem.add(
                 ShoppingList(
                     dialogBinding.shoppingListInputText.text.toString(),
-                    arrayListOf()
+                    hashMapOf("No category" to arrayListOf())
                 )
             )
             saveShoppingList(listOfShoppingItem)
