@@ -84,9 +84,9 @@ class EditShoppingListActivity : AppCompatActivity() {
         val dialogBinding = ConfirmDeleteShopingListDialogBinding.inflate(layoutInflater)
         dialogBinding.confirmButton.setOnClickListener {
             val tinyDB = SharedPreferencesService(applicationContext)
-            val list = tinyDB.getShoppingList("shopping_list", ShoppingList::class.java)
+            val list = tinyDB.getShoppingLists("shopping_list", ShoppingList::class.java)
             list.removeAt(index!!)
-            tinyDB.saveShoppingList("shopping_list", list)
+            tinyDB.saveShoppingLists("shopping_list", list)
             dialog.dismiss()
             finish()
         }
@@ -99,15 +99,15 @@ class EditShoppingListActivity : AppCompatActivity() {
 
     private fun getShoppingList() {
         val tinyDB = SharedPreferencesService(applicationContext)
-        val list = tinyDB.getShoppingList("shopping_list", ShoppingList::class.java)
+        val list = tinyDB.getShoppingLists("shopping_list", ShoppingList::class.java)
         shoppingList = list[index!!] as ShoppingList
     }
 
     private fun saveShoppingList() {
         val tinyDB = SharedPreferencesService(applicationContext)
-        val list = tinyDB.getShoppingList("shopping_list", ShoppingList::class.java)
+        val list = tinyDB.getShoppingLists("shopping_list", ShoppingList::class.java)
         list[index!!] = shoppingList
-        tinyDB.saveShoppingList("shopping_list", list)
+        tinyDB.saveShoppingLists("shopping_list", list)
         binding.productList.setAdapter(
             ProductAdapter(
                 this,
