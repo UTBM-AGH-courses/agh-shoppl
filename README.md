@@ -12,4 +12,4 @@ You can access to the report [here](https://github.com/UTBM-AGH-courses/agh-shop
 
 ## Download
 
-To download this application, you just add to click [here](https://github.com/UTBM-AGH-courses/agh-shoppl/releases/download/v1.0/app-release.apk)
+To download this application, you just add to click [here](https://github.com/UTBM-AGH-courses/agh-shoppl/releases/download/v1.2/app-release.apk)
