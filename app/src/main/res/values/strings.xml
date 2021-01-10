@@ -19,7 +19,6 @@
     <string name="edit">Edit</string>
     <string name="save_checked_products">Save checked products</string>
     <string name="no_shopping_list">No shopping list saved. Please create one to start</string>
-    <string name="no_produt">No product(s) added. Please add one to start</string>
     <string name="string_with_spaces">%s %s</string>
     <string name="product_quantity_0">0 product</string>
     <string name="test_product_category">Product category</string>

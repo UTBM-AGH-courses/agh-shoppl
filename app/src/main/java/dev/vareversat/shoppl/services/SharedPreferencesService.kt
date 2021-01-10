@@ -9,7 +9,7 @@ class SharedPreferencesService(appContext: Context) {
     private val preferences: SharedPreferences =
         appContext.getSharedPreferences("shopping_list", Context.MODE_PRIVATE)
 
-    fun getShoppingLists(key: String?, mClass: Class<*>?): ArrayList<Any> {
+    fun getShoppingLists(key: String, mClass: Class<*>): ArrayList<Any> {
         val gson = Gson()
         val objStrings = ArrayList(listOf(*TextUtils.split(preferences.getString(key, ""), "‚‗‚")))
         val objects = ArrayList<Any>()
@@ -20,7 +20,7 @@ class SharedPreferencesService(appContext: Context) {
         return objects
     }
 
-    fun saveShoppingLists(key: String?, objArray: ArrayList<Any>) {
+    fun saveShoppingLists(key: String, objArray: ArrayList<Any>) {
         val gson = Gson()
         val objStrings = ArrayList<String>()
         for (obj in objArray) {

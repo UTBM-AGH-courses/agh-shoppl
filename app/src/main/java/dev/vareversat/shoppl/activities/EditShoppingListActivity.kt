@@ -49,13 +49,6 @@ class EditShoppingListActivity : AppCompatActivity() {
             binding.productList.expandGroup(i)
             true
         }
-        if (shoppingList.products.isNotEmpty()) {
-            binding.noProducts.visibility = View.GONE
-            binding.saveProductBtn.visibility = View.VISIBLE
-        } else {
-            binding.noProducts.visibility = View.VISIBLE
-            binding.saveProductBtn.visibility = View.GONE
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -171,13 +164,6 @@ class EditShoppingListActivity : AppCompatActivity() {
 
             saveShoppingList()
             dialog.dismiss()
-            if (shoppingList.products.isNotEmpty()) {
-                binding.noProducts.visibility = View.GONE
-                binding.saveProductBtn.visibility = View.VISIBLE
-            } else {
-                binding.noProducts.visibility = View.VISIBLE
-                binding.saveProductBtn.visibility = View.GONE
-            }
             Toast.makeText(
                 this,
                 dialogBinding.productNameInputText.text.toString() + " added to " + shoppingList.name,
@@ -260,13 +246,6 @@ class EditShoppingListActivity : AppCompatActivity() {
             )
             saveShoppingList()
             dialog.dismiss()
-            if (shoppingList.products.isNotEmpty()) {
-                binding.noProducts.visibility = View.GONE
-                binding.saveProductBtn.visibility = View.VISIBLE
-            } else {
-                binding.noProducts.visibility = View.VISIBLE
-                binding.saveProductBtn.visibility = View.GONE
-            }
             Toast.makeText(
                 this,
                 dialogBinding.productNameInputText.text.toString() + " deleted from " + shoppingList.name,
